@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../utils/color_theme.dart';
 import '../../../utils/constants.dart';
+import '../home/home.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -46,9 +47,10 @@ class _OnboardingState extends State<Onboarding> {
                         padding: const EdgeInsets.only(top: 25.0),
                         child: GestureDetector(
                           onTap: () {
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (routeContext) => Home(),
-                            // ));
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (routeContext) => Home(),
+                            ));
                           },
                           child: const Text(
                             "Skip",
@@ -141,9 +143,10 @@ class _OnboardingState extends State<Onboarding> {
                             currentIndex = currentIndex + 1;
                           } else {
                             print('Go to Home Page');
-                            // Navigator.of(context).push(MaterialPageRoute(
-                            //   builder: (routeContext) => Home(),
-                            // ));
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                              builder: (routeContext) => Home(),
+                            ));
                           }
                         },
                       );

@@ -35,6 +35,16 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  modal_bottom_sheet: ^3.0.0-pre
+  http: ^1.1.0
+  intl: ^0.18.1
+  flutter_bloc: ^8.1.3
+  bloc: ^8.1.2
+  meta: ^1.9.1
+  geolocator: ^9.0.2
+  geocoding: ^2.1.0
+  google_fonts: ^5.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -60,6 +70,7 @@ flutter:
   assets:
     - assets/images/sliders/
     - assets/images/status/
+    - assets/images/general/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

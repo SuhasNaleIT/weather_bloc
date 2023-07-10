@@ -10,14 +10,19 @@ class Constants {
   //****** IMAGES CONSTANTS ********/
   static const sliderImg1 = "assets/images/sliders/onboard1.png";
   static const sliderImg2 = "assets/images/sliders/onboard2.png";
-  static const pin = "assets/images/pin.png";
+  static const pin = "assets/images/general/pin.png";
+  static const topBg = "assets/images/general/topBg.png";
+
+  static const basicImage = "assets/images/status/";
+  static const windspeed = "assets/images/general/windspeed.png";
+  static const cloud = "assets/images/general/cloud.png";
+  static const humidity = "assets/images/general/humidity.png";
+
   static const clear = "assets/images/status/clear.png";
-  static const cloud = "assets/images/status/cloud.png";
   static const cloudy = "assets/images/status/cloudy.png";
   static const fog = "assets/images/status/fog.png";
   static const heavycloudy = "assets/images/status/heavycloudy.png";
   static const heavyrain = "assets/images/status/heavyRain.png";
-  static const humidity = "assets/images/status/humidity.png";
   static const lightdrizzle = "assets/images/status/lightdrizzle.png";
   static const lightrain = "assets/images/status/lightrain.png";
   static const lightrainshower = "assets/images/status/lightrainshower.png";
@@ -43,7 +48,6 @@ class Constants {
       "assets/images/status/thunderyoutbreakspossible.png";
   static const torrentialrainshower =
       "assets/images/status/torrentialrainshower.png";
-  static const windspeed = "assets/images/status/windspeed.png";
 
   //******** SLIDERS CONSTANTS *********/
   // static var swipeIndex = 0;
