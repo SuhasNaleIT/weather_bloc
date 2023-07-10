@@ -47,8 +47,7 @@ class _OnboardingState extends State<Onboarding> {
                         padding: const EdgeInsets.only(top: 25.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
+                            Navigator.of(context).push(MaterialPageRoute(
                               builder: (routeContext) => Home(),
                             ));
                           },
@@ -143,8 +142,7 @@ class _OnboardingState extends State<Onboarding> {
                             currentIndex = currentIndex + 1;
                           } else {
                             print('Go to Home Page');
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
+                            Navigator.of(context).push(MaterialPageRoute(
                               builder: (routeContext) => Home(),
                             ));
                           }
