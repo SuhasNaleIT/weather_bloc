@@ -1,23 +1,20 @@
+// To parse this JSON data, do
+//
+//     final fetchWeatherModel = fetchWeatherModelFromJson(jsonString);
 
-import 'dart:convert';
+class FetchWeatherModel {
+  final Location location;
+  final Current current;
+  final Forecast forecast;
 
-FetchWeather fetchWeatherFromJson(String str) =>
-    FetchWeather.fromJson(json.decode(str));
-
-String fetchWeatherToJson(FetchWeather data) => json.encode(data.toJson());
-
-class FetchWeather {
-  Location location;
-  Current current;
-  Forecast forecast;
-
-  FetchWeather({
+  FetchWeatherModel({
     required this.location,
     required this.current,
     required this.forecast,
   });
 
-  factory FetchWeather.fromJson(Map<String, dynamic> json) => FetchWeather(
+  factory FetchWeatherModel.fromJson(Map<String, dynamic> json) =>
+      FetchWeatherModel(
         location: Location.fromJson(json["location"]),
         current: Current.fromJson(json["current"]),
         forecast: Forecast.fromJson(json["forecast"]),
@@ -31,29 +28,29 @@ class FetchWeather {
 }
 
 class Current {
-  num lastUpdatedEpoch;
-  String lastUpdated;
-  num tempC;
-  double tempF;
-  num isDay;
-  Condition condition;
-  double windMph;
-  double windKph;
-  num windDegree;
-  WindDir? windDir;
-  num pressureMb;
-  double pressureIn;
-  num precipMm;
-  num precipIn;
-  num humidity;
-  num cloud;
-  num feelslikeC;
-  num feelslikeF;
-  num visKm;
-  num visMiles;
-  num uv;
-  double gustMph;
-  double gustKph;
+  final int lastUpdatedEpoch;
+  final String lastUpdated;
+  final double tempC;
+  final double tempF;
+  final int isDay;
+  final Condition condition;
+  final double windMph;
+  final double windKph;
+  final int windDegree;
+  final WindDir windDir;
+  final double pressureMb;
+  final double pressureIn;
+  final double precipMm;
+  final double precipIn;
+  final double humidity;
+  final double cloud;
+  final double feelslikeC;
+  final double feelslikeF;
+  final double visKm;
+  final double visMiles;
+  final double uv;
+  final double gustMph;
+  final double gustKph;
 
   Current({
     required this.lastUpdatedEpoch,
@@ -84,27 +81,27 @@ class Current {
   factory Current.fromJson(Map<String, dynamic> json) => Current(
         lastUpdatedEpoch: json["last_updated_epoch"],
         lastUpdated: json["last_updated"],
-        tempC: json["temp_c"],
-        tempF: json["temp_f"]?.toDouble(),
+        tempC: json["temp_c"]?.toDouble() ?? 0.0,
+        tempF: json["temp_f"]?.toDouble() ?? 0.0,
         isDay: json["is_day"],
         condition: Condition.fromJson(json["condition"]),
-        windMph: json["wind_mph"]?.toDouble(),
-        windKph: json["wind_kph"]?.toDouble(),
+        windMph: json["wind_mph"]?.toDouble() ?? 0.0,
+        windKph: json["wind_kph"]?.toDouble() ?? 0.0,
         windDegree: json["wind_degree"],
-        windDir: windDirValues.map[json["wind_dir"]],
-        pressureMb: json["pressure_mb"],
-        pressureIn: json["pressure_in"]?.toDouble(),
-        precipMm: json["precip_mm"],
-        precipIn: json["precip_in"],
-        humidity: json["humidity"],
-        cloud: json["cloud"],
-        feelslikeC: json["feelslike_c"],
-        feelslikeF: json["feelslike_f"],
-        visKm: json["vis_km"],
-        visMiles: json["vis_miles"],
-        uv: json["uv"],
-        gustMph: json["gust_mph"]?.toDouble(),
-        gustKph: json["gust_kph"]?.toDouble(),
+        windDir: windDirValues.map[json["wind_dir"]]!,
+        pressureMb: json["pressure_mb"]?.toDouble() ?? 0.0,
+        pressureIn: json["pressure_in"]?.toDouble() ?? 0.0,
+        precipMm: json["precip_mm"]?.toDouble() ?? 0.0,
+        precipIn: json["precip_in"]?.toDouble() ?? 0.0,
+        humidity: json["humidity"]?.toDouble() ?? 0.0,
+        cloud: json["cloud"]?.toDouble() ?? 0.0,
+        feelslikeC: json["feelslike_c"]?.toDouble() ?? 0.0,
+        feelslikeF: json["feelslike_f"]?.toDouble() ?? 0.0,
+        visKm: json["vis_km"]?.toDouble() ?? 0.0,
+        visMiles: json["vis_miles"]?.toDouble() ?? 0.0,
+        uv: json["uv"]?.toDouble() ?? 0.0,
+        gustMph: json["gust_mph"]?.toDouble() ?? 0.0,
+        gustKph: json["gust_kph"]?.toDouble() ?? 0.0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -135,36 +132,62 @@ class Current {
 }
 
 class Condition {
-  String text;
-  String icon;
-  num code;
+  final String text;
+  final String iconUrl;
+  final int code;
 
-  Condition({
-    required this.text,
-    required this.icon,
-    required this.code,
-  });
+  Condition({required this.text, required this.iconUrl, required this.code});
 
-  factory Condition.fromJson(Map<String, dynamic> json) => Condition(
-        text: json["text"],
-        icon: json["icon"],
-        code: json["code"],
-      );
+  factory Condition.fromJson(Map<String, dynamic> json) {
+    return Condition(
+      text: json['text'],
+      iconUrl: json['icon'],
+      code: json['code'],
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "text": text,
-        "icon": icon,
-        "code": code,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'icon': iconUrl,
+      'code': code,
+    };
+  }
 }
 
-enum WindDir { WSW, SW, SSW }
+enum Icon {
+  CDN_WEATHERAPI_COM_WEATHER_64_X64_DAY_113_PNG,
+  CDN_WEATHERAPI_COM_WEATHER_64_X64_DAY_122_PNG,
+  CDN_WEATHERAPI_COM_WEATHER_64_X64_NIGHT_113_PNG
+}
 
-final windDirValues =
-    EnumValues({"SSW": WindDir.SSW, "SW": WindDir.SW, "WSW": WindDir.WSW});
+final iconValues = EnumValues({
+  "//cdn.weatherapi.com/weather/64x64/day/113.png":
+      Icon.CDN_WEATHERAPI_COM_WEATHER_64_X64_DAY_113_PNG,
+  "//cdn.weatherapi.com/weather/64x64/day/122.png":
+      Icon.CDN_WEATHERAPI_COM_WEATHER_64_X64_DAY_122_PNG,
+  "//cdn.weatherapi.com/weather/64x64/night/113.png":
+      Icon.CDN_WEATHERAPI_COM_WEATHER_64_X64_NIGHT_113_PNG
+});
+
+enum Text { CLEAR, OVERCAST, SUNNY }
+
+final textValues = EnumValues(
+    {"Clear": Text.CLEAR, "Overcast": Text.OVERCAST, "Sunny": Text.SUNNY});
+
+enum WindDir { ENE, N, NE, NNE, NNW, NW }
+
+final windDirValues = EnumValues({
+  "ENE": WindDir.ENE,
+  "N": WindDir.N,
+  "NE": WindDir.NE,
+  "NNE": WindDir.NNE,
+  "NNW": WindDir.NNW,
+  "NW": WindDir.NW
+});
 
 class Forecast {
-  List<Forecastday> forecastday;
+  final List<Forecastday> forecastday;
 
   Forecast({
     required this.forecastday,
@@ -181,11 +204,11 @@ class Forecast {
 }
 
 class Forecastday {
-  DateTime date;
-  num dateEpoch;
-  Day day;
-  Astro astro;
-  List<Hour> hour;
+  final DateTime date;
+  final int dateEpoch;
+  final Day day;
+  final Astro astro;
+  final List<Hour> hour;
 
   Forecastday({
     required this.date,
@@ -214,14 +237,14 @@ class Forecastday {
 }
 
 class Astro {
-  String sunrise;
-  String sunset;
-  String moonrise;
-  String moonset;
-  String moonPhase;
-  String moonIllumination;
-  num isMoonUp;
-  num isSunUp;
+  final String sunrise;
+  final String sunset;
+  final String moonrise;
+  final String moonset;
+  final String moonPhase;
+  final int moonIllumination;
+  final int isMoonUp;
+  final int isSunUp;
 
   Astro({
     required this.sunrise,
@@ -258,26 +281,26 @@ class Astro {
 }
 
 class Day {
-  double maxtempC;
-  num maxtempF;
-  num mintempC;
-  double mintempF;
-  num avgtempC;
-  double avgtempF;
-  double maxwindMph;
-  double maxwindKph;
-  double totalprecipMm;
-  num totalprecipIn;
-  num totalsnowCm;
-  num avgvisKm;
-  num avgvisMiles;
-  num avghumidity;
-  num dailyWillItRain;
-  num dailyChanceOfRain;
-  num dailyWillItSnow;
-  num dailyChanceOfSnow;
-  Condition condition;
-  num uv;
+  final double maxtempC;
+  final double maxtempF;
+  final double mintempC;
+  final double mintempF;
+  final double avgtempC;
+  final double avgtempF;
+  final double maxwindMph;
+  final double maxwindKph;
+  final double totalprecipMm;
+  final double totalprecipIn;
+  final double totalsnowCm;
+  final double avgvisKm;
+  final double avgvisMiles;
+  final double avghumidity;
+  final double dailyWillItRain;
+  final double dailyChanceOfRain;
+  final double dailyWillItSnow;
+  final double dailyChanceOfSnow;
+  final Condition condition;
+  final double uv;
 
   Day({
     required this.maxtempC,
@@ -303,26 +326,26 @@ class Day {
   });
 
   factory Day.fromJson(Map<String, dynamic> json) => Day(
-        maxtempC: json["maxtemp_c"]?.toDouble(),
-        maxtempF: json["maxtemp_f"],
-        mintempC: json["mintemp_c"],
-        mintempF: json["mintemp_f"]?.toDouble(),
-        avgtempC: json["avgtemp_c"],
-        avgtempF: json["avgtemp_f"]?.toDouble(),
-        maxwindMph: json["maxwind_mph"]?.toDouble(),
-        maxwindKph: json["maxwind_kph"]?.toDouble(),
-        totalprecipMm: json["totalprecip_mm"]?.toDouble(),
-        totalprecipIn: json["totalprecip_in"],
-        totalsnowCm: json["totalsnow_cm"],
-        avgvisKm: json["avgvis_km"],
-        avgvisMiles: json["avgvis_miles"],
-        avghumidity: json["avghumidity"],
-        dailyWillItRain: json["daily_will_it_rain"],
-        dailyChanceOfRain: json["daily_chance_of_rain"],
-        dailyWillItSnow: json["daily_will_it_snow"],
-        dailyChanceOfSnow: json["daily_chance_of_snow"],
+        maxtempC: json["maxtemp_c"]?.toDouble() ?? 0.0,
+        maxtempF: json["maxtemp_f"]?.toDouble() ?? 0.0,
+        mintempC: json["mintemp_c"]?.toDouble() ?? 0.0,
+        mintempF: json["mintemp_f"]?.toDouble() ?? 0.0,
+        avgtempC: json["avgtemp_c"]?.toDouble() ?? 0.0,
+        avgtempF: json["avgtemp_f"]?.toDouble() ?? 0.0,
+        maxwindMph: json["maxwind_mph"]?.toDouble() ?? 0.0,
+        maxwindKph: json["maxwind_kph"]?.toDouble() ?? 0.0,
+        totalprecipMm: json["totalprecip_mm"]?.toDouble() ?? 0.0,
+        totalprecipIn: json["totalprecip_in"]?.toDouble() ?? 0.0,
+        totalsnowCm: json["totalsnow_cm"]?.toDouble() ?? 0.0,
+        avgvisKm: json["avgvis_km"]?.toDouble() ?? 0.0,
+        avgvisMiles: json["avgvis_miles"]?.toDouble() ?? 0.0,
+        avghumidity: json["avghumidity"]?.toDouble() ?? 0.0,
+        dailyWillItRain: json["daily_will_it_rain"]?.toDouble() ?? 0.0,
+        dailyChanceOfRain: json["daily_chance_of_rain"]?.toDouble() ?? 0.0,
+        dailyWillItSnow: json["daily_will_it_snow"]?.toDouble() ?? 0.0,
+        dailyChanceOfSnow: json["daily_chance_of_snow"]?.toDouble() ?? 0.0,
         condition: Condition.fromJson(json["condition"]),
-        uv: json["uv"],
+        uv: json["uv"]?.toDouble() ?? 0.0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -350,39 +373,40 @@ class Day {
 }
 
 class Hour {
-  num timeEpoch;
-  String time;
-  double tempC;
-  double tempF;
-  num isDay;
-  Condition condition;
-  double windMph;
-  double windKph;
-  num windDegree;
-  WindDir? windDir;
-  num pressureMb;
-  double pressureIn;
-  double precipMm;
-  num precipIn;
-  num humidity;
-  num cloud;
-  double feelslikeC;
-  double feelslikeF;
-  double windchillC;
-  double windchillF;
-  double heatindexC;
-  double heatindexF;
-  double dewpointC;
-  double dewpointF;
-  num willItRain;
-  num chanceOfRain;
-  num willItSnow;
-  num chanceOfSnow;
-  num visKm;
-  num visMiles;
-  double gustMph;
-  double gustKph;
-  num uv;
+  final double timeEpoch;
+  final String time;
+  final double tempC;
+  final double tempF;
+  final double isDay;
+  final Condition condition;
+  final double windMph;
+  final double windKph;
+  final double windDegree;
+  final WindDir windDir;
+  final double pressureMb;
+  final double pressureIn;
+  final double precipMm;
+  final double precipIn;
+  final double snowCm;
+  final double humidity;
+  final double cloud;
+  final double feelslikeC;
+  final double feelslikeF;
+  final double windchillC;
+  final double windchillF;
+  final double heatindexC;
+  final double heatindexF;
+  final double dewpointC;
+  final double dewpointF;
+  final double willItRain; // Change this to double
+  final double chanceOfRain;
+  final double willItSnow; // Change this to double
+  final double chanceOfSnow;
+  final double visKm;
+  final double visMiles;
+  final double gustMph;
+  final double gustKph;
+  final double uv;
 
   Hour({
     required this.timeEpoch,
@@ -399,6 +423,7 @@ class Hour {
     required this.pressureIn,
     required this.precipMm,
     required this.precipIn,
+    required this.snowCm,
     required this.humidity,
     required this.cloud,
     required this.feelslikeC,
@@ -421,39 +446,40 @@ class Hour {
   });
 
   factory Hour.fromJson(Map<String, dynamic> json) => Hour(
-        timeEpoch: json["time_epoch"],
+        timeEpoch: json["time_epoch"]?.toDouble(),
         time: json["time"],
-        tempC: json["temp_c"]?.toDouble(),
-        tempF: json["temp_f"]?.toDouble(),
-        isDay: json["is_day"],
+        tempC: json["temp_c"]?.toDouble() ?? 0.0,
+        tempF: json["temp_f"]?.toDouble() ?? 0.0,
+        isDay: json["is_day"]?.toDouble() ?? 0.0,
         condition: Condition.fromJson(json["condition"]),
-        windMph: json["wind_mph"]?.toDouble(),
-        windKph: json["wind_kph"]?.toDouble(),
-        windDegree: json["wind_degree"],
-        windDir: windDirValues.map[json["wind_dir"]],
-        pressureMb: json["pressure_mb"],
-        pressureIn: json["pressure_in"]?.toDouble(),
-        precipMm: json["precip_mm"]?.toDouble(),
-        precipIn: json["precip_in"],
-        humidity: json["humidity"],
-        cloud: json["cloud"],
-        feelslikeC: json["feelslike_c"]?.toDouble(),
-        feelslikeF: json["feelslike_f"]?.toDouble(),
-        windchillC: json["windchill_c"]?.toDouble(),
-        windchillF: json["windchill_f"]?.toDouble(),
-        heatindexC: json["heatindex_c"]?.toDouble(),
-        heatindexF: json["heatindex_f"]?.toDouble(),
-        dewpointC: json["dewpoint_c"]?.toDouble(),
-        dewpointF: json["dewpoint_f"]?.toDouble(),
-        willItRain: json["will_it_rain"],
-        chanceOfRain: json["chance_of_rain"],
-        willItSnow: json["will_it_snow"],
-        chanceOfSnow: json["chance_of_snow"],
-        visKm: json["vis_km"],
-        visMiles: json["vis_miles"],
-        gustMph: json["gust_mph"]?.toDouble(),
-        gustKph: json["gust_kph"]?.toDouble(),
-        uv: json["uv"],
+        windMph: json["wind_mph"]?.toDouble() ?? 0.0,
+        windKph: json["wind_kph"]?.toDouble() ?? 0.0,
+        windDegree: json["wind_degree"]?.toDouble(),
+        windDir: windDirValues.map[json["wind_dir"]]!,
+        pressureMb: json["pressure_mb"]?.toDouble() ?? 0.0,
+        pressureIn: json["pressure_in"]?.toDouble() ?? 0.0,
+        precipMm: json["precip_mm"]?.toDouble() ?? 0.0,
+        precipIn: json["precip_in"]?.toDouble() ?? 0.0,
+        snowCm: json["snow_cm"]?.toDouble() ?? 0.0,
+        humidity: json["humidity"]?.toDouble() ?? 0.0,
+        cloud: json["cloud"]?.toDouble() ?? 0.0,
+        feelslikeC: json["feelslike_c"]?.toDouble() ?? 0.0,
+        feelslikeF: json["feelslike_f"]?.toDouble() ?? 0.0,
+        windchillC: json["windchill_c"]?.toDouble() ?? 0.0,
+        windchillF: json["windchill_f"]?.toDouble() ?? 0.0,
+        heatindexC: json["heatindex_c"]?.toDouble() ?? 0.0,
+        heatindexF: json["heatindex_f"]?.toDouble() ?? 0.0,
+        dewpointC: json["dewpoint_c"]?.toDouble() ?? 0.0,
+        dewpointF: json["dewpoint_f"]?.toDouble() ?? 0.0,
+        willItRain: json["will_it_rain"]?.toDouble() ?? 0.0,
+        chanceOfRain: json["chance_of_rain"]?.toDouble() ?? 0.0,
+        willItSnow: json["will_it_snow"]?.toDouble() ?? 0.0,
+        chanceOfSnow: json["chance_of_snow"]?.toDouble() ?? 0.0,
+        visKm: json["vis_km"]?.toDouble() ?? 0.0,
+        visMiles: json["vis_miles"]?.toDouble() ?? 0.0,
+        gustMph: json["gust_mph"]?.toDouble() ?? 0.0,
+        gustKph: json["gust_kph"]?.toDouble() ?? 0.0,
+        uv: json["uv"]?.toDouble() ?? 0.0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -471,6 +497,7 @@ class Hour {
         "pressure_in": pressureIn,
         "precip_mm": precipMm,
         "precip_in": precipIn,
+        "snow_cm": snowCm,
         "humidity": humidity,
         "cloud": cloud,
         "feelslike_c": feelslikeC,
@@ -494,14 +521,14 @@ class Hour {
 }
 
 class Location {
-  String name;
-  String region;
-  String country;
-  double lat;
-  double lon;
-  String tzId;
-  num localtimeEpoch;
-  String localtime;
+  final String name;
+  final String region;
+  final String country;
+  final double lat;
+  final double lon;
+  final String tzId;
+  final int localtimeEpoch;
+  final String localtime;
 
   Location({
     required this.name,

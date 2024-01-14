@@ -8,7 +8,6 @@ import '../../../utils/color_theme.dart';
 import '../../../utils/constants.dart';
 import '../../data/services/formatter.dart';
 // import '../details/details.dart';
-import '../../data/services/formatter.dart';
 import '../widgets/weather_item.dart';
 // import 'bloc/location bloc/bloc/location_bloc.dart';
 import 'bloc/weather bloc/weather_bloc.dart';
@@ -30,7 +29,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    weatherBloc.add(WeatherFetchInital(location: "Mumbai"));
+    // weatherBloc.add(WeatherFetchInital(location: "Mumbai"));
     super.initState();
   }
 
@@ -41,22 +40,39 @@ class _HomeState extends State<Home> {
       body: BlocBuilder<WeatherBloc, WeatherState>(
         bloc: weatherBloc,
         builder: (context, state) {
+          if (state is WeatherInitial) {
+            weatherBloc.add(WeatherFetchInital(location: "mumbai"));
+          }
           if (state is WeatherLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
           if (state is WeatherDetailsErrorState) {
-            return Center(
-                child: Text(
-              state.errMsg,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ));
+            return Scaffold(
+              body: Center(
+                  child: Column(
+                children: [
+                  Text(
+                    state.errMsg,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        weatherBloc.add(WeatherFetchInital(location: "Mumbai"));
+                      },
+                      icon: const Icon(
+                        Icons.replay_rounded,
+                        weight: 2,
+                      ))
+                ],
+              )),
+            );
           }
           if (state is WeatherDetailsFetchedState) {
             final data = state.fetchWeather;
             final dailyWeatherForecast = data.forecast.forecastday;
-
             final hourlyWeatherForecast = dailyWeatherForecast[0].hour;
             return Column(
               children: [
@@ -64,7 +80,7 @@ class _HomeState extends State<Home> {
                   height: size.height * 0.75,
                   width: size.width,
                   // margin: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.fill,
                       image: AssetImage(
@@ -99,114 +115,126 @@ class _HomeState extends State<Home> {
                                 _cityController.clear();
                                 showMaterialModalBottomSheet(
                                   context: context,
-                                  builder: (context) => SingleChildScrollView(
-                                    controller:
-                                        ModalScrollController.of(context),
-                                    child: Container(
-                                      height: size.height * 0.5,
-                                      width: size.width,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 10,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            width: size.width * 0.35,
-                                            child: Divider(
-                                              thickness: 3.5,
-                                              color: ColorTheme.kPrimaryColor,
-                                            ),
+                                  builder: (context) => Builder(
+                                    builder: (BuildContext context) {
+                                      return SingleChildScrollView(
+                                        controller:
+                                            ModalScrollController.of(context),
+                                        child: Container(
+                                          height: size.height * 0.5,
+                                          width: size.width,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 10,
                                           ),
-                                          SizedBox(
-                                            height: size.height * 0.02,
-                                          ),
-                                          Row(
+                                          child: Column(
                                             children: [
                                               SizedBox(
-                                                width: size.width * 0.65,
-                                                child: TextField(
-                                                  onChanged: (searchText) {
-                                                    // fetchDetails(searchText);
-                                                    // fetchWeatherData(searchText);
-                                                  },
-                                                  controller: _cityController,
-                                                  autofocus: true,
-                                                  decoration: InputDecoration(
-                                                    prefixIcon: Icon(
-                                                      Icons.search,
-                                                      color: ColorTheme
-                                                          .kPrimaryColor,
-                                                      size: 30,
-                                                    ),
-                                                    prefixIconConstraints:
-                                                        BoxConstraints(
-                                                      minHeight: 32,
-                                                      minWidth: 35,
-                                                    ),
-                                                    suffixIcon: GestureDetector(
-                                                      onTap: () =>
-                                                          _cityController
-                                                              .clear(),
-                                                      child: Icon(
-                                                        Icons.close,
-                                                        color: ColorTheme
-                                                            .kPrimaryColor,
-                                                        size: 30,
-                                                      ),
-                                                    ),
-                                                    isDense: true,
-                                                    hintText:
-                                                        'Search city e.g. London',
-                                                    hintStyle:
-                                                        TextStyle(fontSize: 14),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: ColorTheme
-                                                            .kPrimaryColor,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        10,
-                                                      ),
-                                                    ),
-                                                  ),
+                                                width: size.width * 0.35,
+                                                child: Divider(
+                                                  thickness: 3.5,
+                                                  color:
+                                                      ColorTheme.kPrimaryColor,
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: size.width * 0.02,
+                                                height: size.height * 0.02,
                                               ),
-                                              SizedBox(
-                                                height: size.height * 0.07,
-                                                child: ElevatedButton(
-                                                  child: Text(
-                                                    'Submit',
-                                                    style:
-                                                        TextStyle(fontSize: 15),
-                                                  ),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor: ColorTheme
-                                                        .kPrimaryColor,
-                                                  ),
-                                                  onPressed: () {
-                                                    weatherBloc.add(
-                                                      WeatherFetchInital(
-                                                        location:
-                                                            _cityController
-                                                                .text,
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                    width: size.width * 0.65,
+                                                    child: TextField(
+                                                      onChanged: (searchText) {
+                                                        // fetchDetails(searchText);
+                                                        // fetchWeatherData(searchText);
+                                                      },
+                                                      controller:
+                                                          _cityController,
+                                                      autofocus: true,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        prefixIcon: Icon(
+                                                          Icons.search,
+                                                          color: ColorTheme
+                                                              .kPrimaryColor,
+                                                          size: 30,
+                                                        ),
+                                                        prefixIconConstraints:
+                                                            const BoxConstraints(
+                                                          minHeight: 32,
+                                                          minWidth: 35,
+                                                        ),
+                                                        suffixIcon:
+                                                            GestureDetector(
+                                                          onTap: () =>
+                                                              _cityController
+                                                                  .clear(),
+                                                          child: Icon(
+                                                            Icons.close,
+                                                            color: ColorTheme
+                                                                .kPrimaryColor,
+                                                            size: 30,
+                                                          ),
+                                                        ),
+                                                        isDense: true,
+                                                        hintText:
+                                                            'Search city e.g. London',
+                                                        hintStyle:
+                                                            const TextStyle(
+                                                                fontSize: 14),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: ColorTheme
+                                                                .kPrimaryColor,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                            10,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    );
-                                                    Navigator.pop(context);
-                                                  },
-                                                ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: size.width * 0.02,
+                                                  ),
+                                                  SizedBox(
+                                                    height: size.height * 0.07,
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor:
+                                                            ColorTheme
+                                                                .kPrimaryColor,
+                                                      ),
+                                                      onPressed: () {
+                                                        weatherBloc.add(
+                                                          WeatherFetchInital(
+                                                            location:
+                                                                _cityController
+                                                                    .text,
+                                                          ),
+                                                        );
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text(
+                                                        'Submit',
+                                                        style: TextStyle(
+                                                            fontSize: 15),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 );
                               },
@@ -283,11 +311,11 @@ class _HomeState extends State<Home> {
                               color: Colors.white,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
                             child: Text(
                               'C',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 80,
                                 // fontWeight: FontWeight.bold,
                                 shadows: [
@@ -385,7 +413,7 @@ class _HomeState extends State<Home> {
                                     left: 10,
                                     right: 10,
                                   ),
-                                  duration: Duration(seconds: 3),
+                                  duration: const Duration(seconds: 3),
                                   backgroundColor: ColorTheme.kOnboardingColor,
                                   action: SnackBarAction(
                                     label: 'dismiss',
@@ -435,7 +463,10 @@ class _HomeState extends State<Home> {
                                 .substring(11, 13);
 
                             String forecastWeatherName =
-                                hourlyWeatherForecast[index].condition.text;
+                                hourlyWeatherForecast[index]
+                                    .condition
+                                    .text
+                                    .toString();
                             String forecastWeatherIcon =
                                 "${forecastWeatherName.replaceAll(' ', '').toLowerCase()}.png";
 
@@ -476,8 +507,9 @@ class _HomeState extends State<Home> {
                                   ),
                                   Image.asset(
                                     Constants.basicImage +
-                                        Formatter.formatImage(
-                                            data.current.condition.text),
+                                        Formatter.formatImage(data
+                                            .current.condition.text
+                                            .toString()),
                                     width: 20,
                                   ),
                                   Row(

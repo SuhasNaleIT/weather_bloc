@@ -15,8 +15,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   void initial(WeatherFetchInital event, Emitter<WeatherState> emit) async {
     emit(WeatherLoading());
     try {
-      final fetchWeathers = await ApiService.getWeatherDetails(event.location);
-      emit(WeatherDetailsFetchedState(fetchWeathers!));
+      final FetchWeatherModel fetchWeather =
+          await ApiService.getWeatherDetails(event.location);
+      emit(WeatherDetailsFetchedState(fetchWeather));
     } catch (e) {
       emit(WeatherDetailsErrorState("Something went wrong!"));
     }

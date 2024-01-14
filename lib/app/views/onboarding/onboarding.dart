@@ -48,7 +48,7 @@ class _OnboardingState extends State<Onboarding> {
                         child: GestureDetector(
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (routeContext) => Home(),
+                              builder: (routeContext) => const Home(),
                             ));
                           },
                           child: const Text(
@@ -143,7 +143,7 @@ class _OnboardingState extends State<Onboarding> {
                           } else {
                             print('Go to Home Page');
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (routeContext) => Home(),
+                              builder: (routeContext) => const Home(),
                             ));
                           }
                         },
@@ -161,11 +161,11 @@ class _OnboardingState extends State<Onboarding> {
                     child: currentIndex < 1
                         ? const Text(
                             "Next",
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           )
                         : const Text(
                             "Get Started",
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                   ),
                 ),

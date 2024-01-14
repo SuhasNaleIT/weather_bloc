@@ -11,7 +11,7 @@ class WeatherLoading extends WeatherState {
 }
 
 class WeatherDetailsFetchedState extends WeatherState {
-  final FetchWeather fetchWeather;
+  final FetchWeatherModel fetchWeather;
   WeatherDetailsFetchedState(this.fetchWeather);
 }
 
